@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      不给 'unsafe-eval'：数据库工具不需要动态求值。
+      CodeMirror 用的是普通 DOM，不碰 eval；Element Plus 也不用。
+      万一日后加图表库确需放宽，也只放宽 script-src 这一项。
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' ws: http: https:; script-src 'self' 'unsafe-inline'"
+    />
+    <title>ThBD</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

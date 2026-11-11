@@ -1,0 +1,108 @@
+appId: com.meng.thbd
+productName: ThBD
+copyright: Copyright © 2026 张萌
+
+directories:
+  output: release
+  buildResources: build
+
+files:
+  - dist/**/*
+  - dist-electron/**/*
+  - resources/**/*
+
+# 数据库驱动必须留在 asar 外面。
+# 原因不是"原生 .node dlopen 不了"（dmdb 的 .node 确实需要），
+# 更主要的是 pg / mysql2 会按相对路径去读自己的 package.json 和子模块，
+# 而 asar 里的路径在 require 解析时容易踩到边界情况。解包一份最省心。
+asarUnpack:
+  - '**/node_modules/pg/**'
+  - '**/node_modules/pg-*/**'
+  - '**/node_modules/mysql2/**'
+  - '**/node_modules/dmdb/**'
+  - '**/node_modules/@dmdb/**'
+
+# 不在打包时重编原生模块：仓库里没有 vs 工具链，重编必失败。
+# dmdb 的预编译 .node 是 npm 包里自带的，直接可用。
+npmRebuild: false
+compression: normal
+
+# ---------------------------------------------------------------- Windows
+win:
+  icon: build/icon.ico
+  target:
+    - target: nsis
+      arch: [x64]
+    # 免安装单文件：给"拷到别人机器上跑一下"的场合，双击即用、不写注册表
+    - target: portable
+      arch: [x64]
+  artifactName: ThBD-${version}-win-${arch}.${ext}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: ThBD
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  artifactName: ThBD-${version}-win-setup.${ext}
+
+portable:
+  artifactName: ThBD-${version}-win-portable.${ext}
+
+# ------------------------------------------------------------------ macOS
+mac:
+  icon: build/icon.png
+  category: public.app-category.developer-tools
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+  artifactName: ThBD-${version}-mac-${arch}.${ext}
+  # 没有 Apple 开发者证书：不签名、不公证。首次打开要「右键 → 打开」
+  identity: null
+  hardenedRuntime: false
+  gatekeeperAssess: false
+  extendInfo:
+    LSMinimumSystemVersion: '10.15'
+
+dmg:
+  title: ThBD ${version}
+  artifactName: ThBD-${version}-mac-${arch}.${ext}
+
+# ------------------------------------------------------------------ Linux
+linux:
+  icon: build/icons
+  category: Development
+  executableName: thbd
+  synopsis: 数据库管理工具
+  description: >
+    ThBD 是一个数据库客户端：连接树、SQL 编辑器、结果表格，
+    支持 PostgreSQL / MySQL / 人大金仓 KingBase / 达梦 DM。
+  target:
+    - AppImage
+    - deb
+  artifactName: ThBD-${version}-linux-${arch}.${ext}
+  desktop:
+    Name: ThBD
+    Comment: 数据库管理工具
+    Keywords: database;sql;postgres;mysql;kingbase;dm;
+    # 不写这个，任务栏会把窗口当成"另一个程序"，图标对不上
+    StartupWMClass: ThBD
+
+deb:
+  # deb 的 control 文件必须有 Maintainer，没有 email 会直接构建失败
+  maintainer: 张萌 <zhangmeng@example.com>
+  priority: optional
+  depends:
+    - libgtk-3-0
+    - libnotify4
+    - libnss3
+    - libxss1
+    - libxtst6
+    - xdg-utils
+    - libatspi2.0-0
+    - libsecret-1-0
+    - libgbm1
+    - libasound2

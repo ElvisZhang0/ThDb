@@ -1,0 +1,48 @@
+# ============================================================
+# ThBD .gitignore
+# 原则：凡是"能由 pnpm build / electron-builder 重新生成"的，都不进仓库。
+# ============================================================
+
+# ---------- 依赖 ----------
+node_modules/
+.pnpm-store/
+
+# ---------- 构建产物 ----------
+dist/
+dist-electron/
+*.tsbuildinfo
+
+# electron-builder 的输出：安装包 + unpacked 目录，一次打包 900MB+
+release/
+*.blockmap
+builder-debug.yml
+
+# ---------- 本地工具 / 编辑器 ----------
+.workbuddy/
+*.genie
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.vs/
+*.suo
+.history/
+
+# ---------- 日志与临时文件 ----------
+*.log
+npm-debug.log*
+pnpm-debug.log*
+*.tmp
+.tmp/
+
+# ---------- 环境变量 ----------
+.env
+.env.*
+!.env.example
+
+# ---------- 系统文件 ----------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- 杂项 ----------
+coverage/

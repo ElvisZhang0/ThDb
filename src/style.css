@@ -1,0 +1,180 @@
+/* ============================================================================
+ * ThBD 全局样式
+ *
+ * 深浅色都靠 :root[data-theme] 上的一套 CSS 变量切换 —— 不用 Element Plus 的
+ * html.dark（那套变量名是 el- 前缀，改不动我们自己的组件）。两套变量同名，
+ * 组件里只写 var(--xxx)，切主题时浏览器整片重算，没有 JS 参与重绘。
+ * ========================================================================== */
+
+:root {
+  --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei UI',
+    'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Cascadia Mono', Consolas, 'SF Mono', Menlo,
+    'Microsoft YaHei Mono', monospace;
+
+  --radius: 6px;
+  --radius-sm: 4px;
+  --sidebar-w: 280px;
+
+  /* 行高、字号在结果表和结构树里必须一致，否则两处对齐会错开 */
+  --row-h: 26px;
+  --text-sm: 12px;
+  --text-base: 13px;
+}
+
+:root[data-theme='dark'] {
+  --bg: #16181d;
+  --bg-panel: #1b1e24;
+  --bg-elev: #22262e;
+  --bg-hover: #272b34;
+  --bg-active: #2e3742;
+  --border: #2b303a;
+  --border-soft: #24282f;
+
+  --text: #dde2ea;
+  --text-dim: #8b93a1;
+  --text-faint: #626a78;
+
+  --accent: #3fb9a0;
+  --accent-hover: #4ecdb2;
+  --accent-soft: rgba(63, 185, 160, 0.14);
+  --danger: #e0555f;
+  --warn: #d9a34a;
+  --null: #6d7583;
+
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #f7f8fa;
+  --bg-panel: #ffffff;
+  --bg-elev: #f1f3f6;
+  --bg-hover: #eceff3;
+  --bg-active: #e2e8ef;
+  --border: #e0e3e9;
+  --border-soft: #ebedf1;
+
+  --text: #1d222b;
+  --text-dim: #626a78;
+  --text-faint: #8d95a3;
+
+  --accent: #0f9b83;
+  --accent-hover: #0c8a74;
+  --accent-soft: rgba(15, 155, 131, 0.1);
+  --danger: #d33f4a;
+  --warn: #b8791a;
+  --null: #9aa1ad;
+
+  --shadow: 0 8px 28px rgba(16, 24, 40, 0.12);
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  background: var(--bg);
+  color: var(--text);
+  /* 拖拽选中的默认蓝在深色底上很刺眼，换成主题色 */
+  -webkit-user-select: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* 只有真正需要选文字的地方才放开选择 */
+input,
+textarea,
+.selectable,
+.cm-editor {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-faint);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner,
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------------------------------------------------------------- Element Plus */
+
+:root {
+  --el-color-primary: var(--accent);
+  --el-border-radius-base: var(--radius-sm);
+  --el-font-family: var(--font-ui);
+}
+
+.el-dialog {
+  --el-dialog-bg-color: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.el-dialog__title,
+.el-form-item__label {
+  color: var(--text) !important;
+}
+
+.el-input__wrapper,
+.el-textarea__inner,
+.el-select__wrapper {
+  background: var(--bg-elev) !important;
+  box-shadow: 0 0 0 1px var(--border) inset !important;
+}
+
+.el-input__wrapper.is-focus,
+.el-select__wrapper.is-focused {
+  box-shadow: 0 0 0 1px var(--accent) inset !important;
+}
+
+.el-input__inner,
+.el-textarea__inner {
+  color: var(--text) !important;
+}
+
+.el-button {
+  --el-button-bg-color: var(--bg-elev);
+  --el-button-text-color: var(--text);
+  --el-button-border-color: var(--border);
+  --el-button-hover-bg-color: var(--bg-hover);
+  --el-button-hover-border-color: var(--text-faint);
+  --el-button-hover-text-color: var(--text);
+}
+
+.el-button--primary {
+  --el-button-bg-color: var(--accent);
+  --el-button-border-color: var(--accent);
+  --el-button-text-color: #06231f;
+  --el-button-hover-bg-color: var(--accent-hover);
+  --el-button-hover-border-color: var(--accent-hover);
+  --el-button-hover-text-color: #06231f;
+}
+
+.el-message-box,
+.el-message {
+  border-color: var(--border) !important;
+}
